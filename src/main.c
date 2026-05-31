@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include <stdio.h>
 
-// Define chunk structure
 typedef struct {
     size_t header;
 } chunk_t;
@@ -28,14 +27,23 @@ void *my_malloc(size_t size){
 }
 
 int main(void){
-    int *x = my_malloc(sizeof(int));
+    // TEST 1 - Write to allocated memory
+    for(int i=0; i<5;i++){
+        printf("====== ITERATION %d ======\n", i+1);
+        printf("Program break is currently at address: %p\n", sbrk(0));
+        int *x = my_malloc(sizeof(int));
+        printf("%ld bytes of memory assigned\n", sizeof(int));
+        printf("Program break is now at address: %p\n", sbrk(0));
+        if (x == NULL){
+            printf("NULL value at address %p\n", x);
+            return 1;
+        }
 
-    if (x == NULL){
-        return 1;
-    }
+        *x = i;
+        printf("Value assigned\n");
+        printf("Memory address %p holds the value: %d\n", x, *x);
+        printf("\n");
+    };
 
-    *x = 10;
-
-    printf("%d\n", *x);
     return 0;
 }
